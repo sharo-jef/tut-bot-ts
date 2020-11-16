@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <title>設定</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+    </head>
+    <body>
+        <main>
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <h4>学生情報</h4>
+                        <form>
+                            <div class="form-group">
+                                <label>学籍番号</label>
+                                <input class="form-control" type="text" value="" /><br />
+                                <label>学部</label>
+                                <select class="custom-select">
+                                    <option value="BS">BS</option>
+                                    <option value="CS">CS</option>
+                                    <option value="MS">MS</option>
+                                    <option value="ES">ES</option>
+                                    <option value="院八">院八</option>
+                                    <option value="HS">HS</option>
+                                    <option value="DS">DS</option>
+                                    <option value="院DS">院DS</option>
+                                </select>
+                            </div>
+                        <hr />
+                        <h4>プッシュ通知設定</h4>
+                            <div class="form-group">
+                                <label>新着情報</label>
+                                <input type="checkbox" checked />
+                                <label>休講案内</label>
+                                <input type="checkbox" checked />
+                                <label>イベント</label>
+                                <input type="checkbox" checked />
+                                <hr />
+                                <input type="hidden" value="" id="userId" />
+                                <button class="btn btn-primary">保存</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="response"></div>
+            <div id="error"></div>
+        </main>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+        <script>
+            liff.init({
+                liffId: '1655168464-glkMVdNy'
+            })
+                .then(() => {
+                    if (!liff.isLoggedIn() && !liff.isInClient()) {
+                        alert('error: please login');
+                    } else {
+                        alert(location.search);
+                        document.querySelector('#userId').value = liff.getDecodedIDToken().sub;
+                        fetch('https://tut-php-api.herokuapp.com', {
+                            method: 'POST',
+                            cache: 'no-cache',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                to: ['foo'],
+                                type: 'text',
+                                text: 'test',
+                            }),
+                        })
+                            .then(response => {
+                                document.querySelector('#response').innerHTML = response.body;
+                            })
+                            .catch(error => {
+                                document.querySelector('#error').innerHTML = error;
+                            });
+                    }
+                });
+        </script>
+    </body>
+</html>
