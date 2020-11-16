@@ -4,7 +4,7 @@
   "description": "tut-bot (ts)",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node --experimental-modules -r dotenv/config .",
+    "start": "node -r dotenv/config .",
     "build": "tsc"
   },
   "author": "sharo_jef",
