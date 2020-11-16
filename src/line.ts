@@ -28,6 +28,7 @@ export default class Line implements IClient {
         );
         this.app.use(express.urlencoded({extended: true}));
         this.app.use(express.text());
+        this.app.use('/settings', express.static('settings'));
         this.app.get('/', (_, res) => res.status(200).end());
         this.app.post('/hook', line.middleware(config), async (req, res) => {
             res.status(200).end();
@@ -47,9 +48,6 @@ export default class Line implements IClient {
             res.status(200).end();
             const request: Message[] = JSON.parse(req.body);
             this.send(request);
-        });
-        this.app.get('/settings', async (_, res) => {
-            res.sendFile(`${process.env.ROOT}/settings/index.html`);
         });
 
         // ! DEBUG

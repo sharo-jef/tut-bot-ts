@@ -3,11 +3,56 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="smartaddon-verification" content="936e8d43184bc47ef34e25e426c508fe" />
+
         <title>設定</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+        <link rel="stylesheet" href="css/site.min.css" />
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,800,700,400italic,600italic,700italic,800italic,300italic" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="css/main.css" />
+        <!--[if lt IE 9]>
+            <script src="js/html5shiv.js"></script>
+            <script src="js/respond.min.js"></script>
+        <![endif]-->
     </head>
     <body>
         <main>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="example-title">
+                            学生情報
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <form class="col-md-12 form-horizontal">
+                        <fieldset>
+                            <div class="form-group">
+                                <label for="id" class="col-md-4 control-label">label</label>
+                                <div class="col-sm-8">
+                                    <input
+                                        id="id"
+                                        type="text"
+                                        class="form-control custom-input"
+                                        placeholder="Text input"
+                                    />
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                    <form class="well form-horizontal" action="xxx.cgi" method="post">
+                        <fieldset>
+                        <legend accesskey="1"><kbd>1</kbd>お客様の情報をご記入ください</legend>
+                        <div class="form-group">
+                        <label for="name" class="col-sm-5 control-label">名前<kbd>n</kbd> <strong>必須</strong></label>
+                        <div class="col-sm-7">
+                        <input type="text" class="form-control" id="name" value="" size="24" placeholder="お名前をご記入ください" required>
+                        </div>
+                        </div>
+                        </fieldset>
+                        </form>
+                </div>
+            </div>
             <div class="container">
                 <div class="row">
                     <div class="col">
@@ -48,10 +93,8 @@
             <div id="response"></div>
             <div id="error"></div>
         </main>
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-        <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+        <script src="js/site.min.js"></script>
+        <script src="https://static.line-scdn.net/liff/edge/2/sdk.js" charset="utf-8"></script>
         <script>
             liff.init({
                 liffId: '1655168464-glkMVdNy'
@@ -62,24 +105,9 @@
                     } else {
                         alert(location.search);
                         document.querySelector('#userId').value = liff.getDecodedIDToken().sub;
-                        fetch('https://tut-php-api.herokuapp.com', {
-                            method: 'POST',
-                            cache: 'no-cache',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                to: ['foo'],
-                                type: 'text',
-                                text: 'test',
-                            }),
-                        })
-                            .then(response => {
-                                document.querySelector('#response').innerHTML = response.body;
-                            })
-                            .catch(error => {
-                                document.querySelector('#error').innerHTML = error;
-                            });
+                        const script = document.createElement('script');
+                        script.src = `https://tut-php-api.herokuapp.com/api/v1/settings/${liff.getDecodedIDToken().sub}?type=js`;
+                        document.body.appendChild(script);
                     }
                 });
         </script>

@@ -1,0 +1,13 @@
+body {
+    background-color: #f1f2f6;
+}
+
+main {
+    padding-top: 20px;
+}
+
+.custom-input {
+    border: none;
+    background: none;
+    text-align: right;
+}
