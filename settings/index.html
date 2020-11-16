@@ -7,7 +7,7 @@
 
         <title>設定</title>
         <link rel="stylesheet" href="css/site.min.css" />
-        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,800,700,400italic,600italic,700italic,800italic,300italic" rel="stylesheet" type="text/css" />
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,800,700,400italic,600italic,700italic,800italic,300italic" rel="stylesheet" type="text/css" />
         <link rel="stylesheet" href="css/main.css" />
         <!--[if lt IE 9]>
             <script src="js/html5shiv.js"></script>
@@ -16,79 +16,85 @@
     </head>
     <body>
         <main>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="example-title">
-                            学生情報
+            <div class="container-fluid">
+                <form class="col-md-12 form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="custom-title">
+                                学生情報
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <form class="col-md-12 form-horizontal">
-                        <fieldset>
-                            <div class="form-group">
-                                <label for="id" class="col-md-4 control-label">label</label>
-                                <div class="col-sm-8">
-                                    <input
-                                        id="id"
-                                        type="text"
-                                        class="form-control custom-input"
-                                        placeholder="Text input"
-                                    />
-                                </div>
+                    <div class="row">
+                        <div class="form-group custom-form-group">
+                            <label
+                                for="id"
+                                class="custom-label control-label col-xs-3"
+                            >
+                                学籍番号
+                            </label>
+                            <div class="col-xs-9">
+                                <input
+                                    id="id"
+                                    type="text"
+                                    class="form-control custom-input input-sm"
+                                    placeholder="学籍番号を入力してください"
+                                />
                             </div>
-                        </fieldset>
-                    </form>
-                    <form class="well form-horizontal" action="xxx.cgi" method="post">
-                        <fieldset>
-                        <legend accesskey="1"><kbd>1</kbd>お客様の情報をご記入ください</legend>
-                        <div class="form-group">
-                        <label for="name" class="col-sm-5 control-label">名前<kbd>n</kbd> <strong>必須</strong></label>
-                        <div class="col-sm-7">
-                        <input type="text" class="form-control" id="name" value="" size="24" placeholder="お名前をご記入ください" required>
                         </div>
-                        </div>
-                        </fieldset>
-                        </form>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col">
-                        <h4>学生情報</h4>
-                        <form>
-                            <div class="form-group">
-                                <label>学籍番号</label>
-                                <input class="form-control" type="text" value="" /><br />
-                                <label>学部</label>
-                                <select class="custom-select">
-                                    <option value="BS">BS</option>
-                                    <option value="CS">CS</option>
-                                    <option value="MS">MS</option>
-                                    <option value="ES">ES</option>
-                                    <option value="院八">院八</option>
-                                    <option value="HS">HS</option>
-                                    <option value="DS">DS</option>
-                                    <option value="院DS">院DS</option>
-                                </select>
-                            </div>
-                        <hr />
-                        <h4>プッシュ通知設定</h4>
-                            <div class="form-group">
-                                <label>新着情報</label>
-                                <input type="checkbox" checked />
-                                <label>休講案内</label>
-                                <input type="checkbox" checked />
-                                <label>イベント</label>
-                                <input type="checkbox" checked />
-                                <hr />
-                                <input type="hidden" value="" id="userId" />
-                                <button class="btn btn-primary">保存</button>
-                            </div>
-                        </form>
                     </div>
-                </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="custom-title">
+                                プッシュ通知設定
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group custom-form-group">
+                            <label
+                                for="id"
+                                class="custom-label control-label col-xs-3"
+                            >
+                                新着情報
+                            </label>
+                            <div class="col-xs-9 custom-toggle">
+                                <label class="toggle">
+                                    <input type="checkbox" checked>
+                                    <span class="handle"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group custom-form-group">
+                            <label
+                                for="id"
+                                class="custom-label control-label col-xs-3"
+                            >
+                                休講情報
+                            </label>
+                            <div class="col-xs-9 custom-toggle">
+                                <label class="toggle">
+                                    <input type="checkbox" checked>
+                                    <span class="handle"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group custom-form-group">
+                            <label
+                                for="id"
+                                class="custom-label control-label col-xs-3"
+                            >
+                                イベント
+                            </label>
+                            <div class="col-xs-9 custom-toggle">
+                                <label class="toggle">
+                                    <input type="checkbox" checked>
+                                    <span class="handle"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
             <div id="response"></div>
             <div id="error"></div>
@@ -101,7 +107,8 @@
             })
                 .then(() => {
                     if (!liff.isLoggedIn() && !liff.isInClient()) {
-                        alert('error: please login');
+                        // alert('error: please login');
+                        console.warn('please login');
                     } else {
                         alert(location.search);
                         document.querySelector('#userId').value = liff.getDecodedIDToken().sub;

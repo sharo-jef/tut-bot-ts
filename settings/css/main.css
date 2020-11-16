@@ -2,12 +2,32 @@ body {
     background-color: #f1f2f6;
 }
 
-main {
-    padding-top: 20px;
-}
-
 .custom-input {
     border: none;
     background: none;
+    text-align: right;
+}
+
+.custom-label {
+    text-align: left !important;
+    line-height: 30px;
+}
+
+.custom-form-group {
+    background-color: #ffffff;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    margin-top: -1px;
+    margin-bottom: 0px;
+}
+
+.custom-title {
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.custom-toggle {
     text-align: right;
 }
