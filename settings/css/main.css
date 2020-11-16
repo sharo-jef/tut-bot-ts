@@ -11,6 +11,7 @@ body {
 .custom-label {
     text-align: left !important;
     line-height: 30px;
+    padding-top: 5px;
 }
 
 .custom-form-group {
