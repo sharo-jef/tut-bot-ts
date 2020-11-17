@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "node -r dotenv/config .",
-    "build": "tsc"
+    "build": "tsc",
+    "fetch": "git fetch origin master; git reset --hard origin/master; npm i; npm run build; refresh;"
   },
   "author": "sharo_jef",
   "license": "MIT",
