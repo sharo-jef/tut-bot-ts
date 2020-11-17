@@ -53,42 +53,56 @@
                     <div class="row">
                         <div class="form-group custom-form-group">
                             <label
-                                for="id"
+                                for="new"
                                 class="custom-label control-label col-xs-3"
                             >
                                 新着情報
                             </label>
                             <div class="col-xs-9 custom-toggle">
                                 <label class="toggle">
-                                    <input type="checkbox" checked>
+                                    <input id="new" type="checkbox" checked>
                                     <span class="handle"></span>
                                 </label>
                             </div>
                         </div>
                         <div class="form-group custom-form-group">
                             <label
-                                for="id"
+                                for="important"
+                                class="custom-label control-label col-xs-3"
+                            >
+                                重要情報
+                            </label>
+                            <div class="col-xs-9 custom-toggle">
+                                <label class="toggle">
+                                    <input id="important" type="checkbox" checked>
+                                    <span class="handle"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group custom-form-group">
+                            <label
+                                for="lecture"
                                 class="custom-label control-label col-xs-3"
                             >
                                 休講情報
                             </label>
                             <div class="col-xs-9 custom-toggle">
                                 <label class="toggle">
-                                    <input type="checkbox" checked>
+                                    <input id="lecture" type="checkbox" checked>
                                     <span class="handle"></span>
                                 </label>
                             </div>
                         </div>
                         <div class="form-group custom-form-group">
                             <label
-                                for="id"
+                                for="event"
                                 class="custom-label control-label col-xs-3"
                             >
                                 イベント
                             </label>
                             <div class="col-xs-9 custom-toggle">
                                 <label class="toggle">
-                                    <input type="checkbox" checked>
+                                    <input id="event" type="checkbox" checked>
                                     <span class="handle"></span>
                                 </label>
                             </div>
@@ -96,8 +110,6 @@
                     </div>
                 </form>
             </div>
-            <div id="response"></div>
-            <div id="error"></div>
         </main>
         <script src="js/site.min.js"></script>
         <script src="https://static.line-scdn.net/liff/edge/2/sdk.js" charset="utf-8"></script>
@@ -110,8 +122,7 @@
                         // alert('error: please login');
                         console.warn('please login');
                     } else {
-                        alert(location.search);
-                        document.querySelector('#userId').value = liff.getDecodedIDToken().sub;
+                        document.querySelector('#id').value = liff.getDecodedIDToken().sub;
                         const script = document.createElement('script');
                         script.src = `https://tut-php-api.herokuapp.com/api/v1/settings/${liff.getDecodedIDToken().sub}?type=js`;
                         document.body.appendChild(script);
