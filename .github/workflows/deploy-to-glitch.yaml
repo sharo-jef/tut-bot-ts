@@ -6,11 +6,14 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
     steps:
       - name: Setup Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: 15
+          node-version: ${{ matrix.node-version }}
       - name: Build
         run: npm i; npm run build
       - name: Deploy To Glitch
