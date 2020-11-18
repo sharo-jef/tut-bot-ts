@@ -70,7 +70,8 @@ export default class Line implements IClient {
         });
         this.app.post('/api/v1/settings/:id', (req, res) => {
             res.status(200).end();
-            logger.debug(req.body, typeof req.body);
+            axios.post(`https://tut-php-api.herokuapp.com/api/v1/settings/${req.params.id}`, req.body)
+                .catch(error => logger.error(error));
         });
 
         // ! DEBUG
