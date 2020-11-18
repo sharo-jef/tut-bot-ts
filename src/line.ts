@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as fs from 'fs';
 
 import axios from 'axios';
@@ -143,13 +142,13 @@ export default class Line implements IClient {
             ) {
                 tmp.message.quickReply = {
                     items: (message as TextMessage).quickReply!.texts.map(text => ({
-                            type: 'action',
-                            action: {
-                                type: 'message',
-                                label: text,
-                                text: text,
-                            },
-                        } as line.QuickReplyItem)),
+                        type: 'action',
+                        action: {
+                            type: 'message',
+                            label: text,
+                            text: text,
+                        },
+                    } as line.QuickReplyItem)),
                 };
             }
             return tmp;
@@ -186,7 +185,7 @@ export default class Line implements IClient {
         }
     }
 
-     /**
+    /**
      * convert line message object into general message object
      */
     _convertToGeneral(message: line.WebhookEvent): Message | void {

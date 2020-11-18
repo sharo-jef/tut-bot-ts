@@ -18,6 +18,7 @@
     ],
     "rules": {
         "@typescript-eslint/semi": [2, "always"],
+        "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/type-annotation-spacing": [
             2,
             {
@@ -31,6 +32,7 @@
                 }
             }
         ],
+        "indent": [2, 4],
         "quotes": [2, "single", {"allowTemplateLiterals": true}],
         "semi": "off", // typescriptを使用しない場合は [2, "always"]
         "keyword-spacing": [2, {"before": true, "after": true}],
