@@ -1,4 +1,4 @@
-import { RichMenu } from '@line/bot-sdk';
+import {RichMenu} from '@line/bot-sdk';
 
 export default {
     size: {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import * as fs from 'fs';
 
 import axios from 'axios';
@@ -5,7 +6,7 @@ import * as express from 'express';
 import * as line from '@line/bot-sdk';
 import * as log4js from 'log4js';
 
-import { FollowMessage, Message, MultipleMessage, TextMessage } from './@types/tutbot';
+import {FollowMessage, Message, MultipleMessage, TextMessage} from './@types/tutbot';
 import IClient from './iclient';
 import richmenu from './richmenu';
 
@@ -13,19 +14,19 @@ const logger = log4js.getLogger('Line');
 logger.level = process.env.LOG_LEVEL ?? 'all';
 
 export default class Line implements IClient {
-    listeners: {type: string; listener: (...args: any) => Promise<void>;}[] = [];
+    listeners: {type: string; listener: (...args: unknown[]) => Promise<void>;}[] = [];
     client: line.Client;
     app: express.Express;
 
     constructor(
         port: string | number,
-        config: line.MiddlewareConfig & line.ClientConfig
+        config: line.MiddlewareConfig & line.ClientConfig,
     ) {
         this.client = new line.Client(config);
         this.app = express();
         const listener = this.app.listen(
             port,
-            () => logger.info(`listening on port ${listener.address().port}`)
+            () => logger.info(`listening on port ${listener.address().port}`),
         );
         this.app.use(express.urlencoded({extended: true}));
         this.app.use(express.text());
@@ -60,13 +61,6 @@ export default class Line implements IClient {
                     res.status(500).end();
                     logger.error(error);
                 });
-            // res.send(JSON.stringify({
-            //     number: 'foo',
-            //     push_new: false,
-            //     push_important: false,
-            //     push_cancel: false,
-            //     push_event: true,
-            // }));
         });
         this.app.post('/api/v1/settings/:id', (req, res) => {
             res.status(200).end();
@@ -89,8 +83,8 @@ export default class Line implements IClient {
             .catch(error => logger.error(error));
     }
 
-    async send(messages: Message[]) {
-        const lineMessages: {to:string[],message:import('@line/bot-sdk').Message}[] = [];
+    async send(messages: Message[]): Promise<void> {
+        const lineMessages: {to: string[], message: import('@line/bot-sdk').Message}[] = [];
         messages.map(this._convertToLine).forEach(message => {
             if (!message) {
                 return;
@@ -116,9 +110,14 @@ export default class Line implements IClient {
         }
     }
 
-    on(event: 'message', listener: (message: Message) => Promise<void>): IClient;
-    on(event: 'messages', listener: (messages: Message[]) => Promise<void>): IClient;
-    on(event: string, listener: (...args: any) => Promise<void>) {
+    on(event: 'message', listener: (message: Message) => Promise<void>): this;
+    on(event: 'messages', listener: (messages: Message[]) => Promise<void>): this;
+    on(
+        event: string,
+        listener:
+            ((message: Message) => Promise<void>)
+            | ((messages: Message[]) => Promise<void>),
+    ): this {
         this.listeners.push({type: event, listener});
         return this;
     }
@@ -126,15 +125,15 @@ export default class Line implements IClient {
     /**
      * convert general message object into line message object
      */
-    _convertToLine(message: Message): {to:string[],message:line.Message} | void {
-        let tmp: {to:string[],message:line.Message};
+    _convertToLine(message: Message): {to: string[], message: line.Message} | void {
+        let tmp: {to: string[], message: line.Message};
         switch (message.type) {
         case 'text':
             tmp = {
                 to: message.to,
                 message: {
                     type: 'text',
-                    text: (message as TextMessage).text
+                    text: (message as TextMessage).text,
                 },
             };
             if (
@@ -149,8 +148,8 @@ export default class Line implements IClient {
                                 type: 'message',
                                 label: text,
                                 text: text,
-                            }
-                        } as line.QuickReplyItem))
+                            },
+                        } as line.QuickReplyItem)),
                 };
             }
             return tmp;
@@ -197,7 +196,7 @@ export default class Line implements IClient {
                     return {
                         to: [message.source.userId],
                         type: 'text',
-                        text: message.message.text
+                        text: message.message.text,
                     } as TextMessage;
                 }
             }
@@ -206,7 +205,7 @@ export default class Line implements IClient {
             if (message.source.userId) {
                 return {
                     to: [message.source.userId],
-                    type: 'follow'
+                    type: 'follow',
                 } as FollowMessage;
             }
         }
