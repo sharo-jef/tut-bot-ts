@@ -6,17 +6,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [15.x]
     steps:
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
       - name: Deploy To Glitch
         uses: kanadgupta/glitch-sync@master
         with:
           project-id: ${{ secrets.PROJECT_ID }}
           auth-token: ${{ secrets.AUTH_TOKEN }}
-      - run: "curl -H \"Content-Type: application/json\" -X POST -d '{\"content\": \"deployed github:sharo-jef/tut-bot-ts to glitch:tut-line-bot-test\"}' https://discordapp.com/api/webhooks/778585234299551765/CpqnFhYiQuBAYr8WVyo1o4wo6rVhBDmqkzqCIrX6j7UcCmvsv358vyZWAemn-QaZRDKZ"
+      - run: "curl -H \"Content-Type: application/json\" -X POST -d '{\"content\": \"Deployed `github:sharo-jef/tut-bot-ts` to `glitch:tut-line-bot-test`\"}' https://discordapp.com/api/webhooks/778585234299551765/CpqnFhYiQuBAYr8WVyo1o4wo6rVhBDmqkzqCIrX6j7UcCmvsv358vyZWAemn-QaZRDKZ"
