@@ -130,13 +130,24 @@
 
                                 document.querySelector('form')
                                     .addEventListener('change', send);
+
+                                let prevId = data.number;
+
+                                setInterval(() => {
+                                    const currentId = document.querySelector('#id').value
+                                    if (prevId !== currentId) {
+                                        send();
+                                    }
+                                    prevId = currentId;
+                                }, 500);
                             })
                             .catch(error => alert(error));
+
                         function send() {
                             fetch(
                                 `/api/v1/settings/${liff.getDecodedIDToken().sub}`,
                                 {
-                                    method: post,
+                                    method: 'POST',
                                     body: JSON.stringify({
                                         number: document.querySelector('#id').value,
                                         push_new: document.querySelector('#new').checked,
@@ -145,7 +156,8 @@
                                         push_event: document.querySelector('#event').checked,
                                     }),
                                 }
-                            );
+                            )
+                                .catch(error => alert(error));
                         }
                     }
                 });

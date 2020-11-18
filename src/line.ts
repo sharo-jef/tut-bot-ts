@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 
+import axios from 'axios';
 import * as express from 'express';
 import * as line from '@line/bot-sdk';
 import * as log4js from 'log4js';
@@ -51,14 +52,21 @@ export default class Line implements IClient {
         });
 
         this.app.get('/api/v1/settings/:id', (req, res) => {
-            res.send(JSON.stringify({
-                number: 'foo',
-                push_new: false,
-                push_important: false,
-                push_cancel: false,
-                push_event: true,
-            }));
-            // `https://tut-php-api.herokuapp.com/api/v1/settings/${liff.getDecodedIDToken().sub}?type=js`
+            axios.get(`https://tut-php-api.herokuapp.com/api/v1/settings/${req.params.id}`)
+                .then(response => {
+                    res.send(JSON.stringify(response.data));
+                })
+                .catch(error => {
+                    res.status(500).end();
+                    logger.error(error);
+                });
+            // res.send(JSON.stringify({
+            //     number: 'foo',
+            //     push_new: false,
+            //     push_important: false,
+            //     push_cancel: false,
+            //     push_event: true,
+            // }));
         });
         this.app.post('/api/v1/settings/:id', (req, res) => {
             res.status(200).end();
