@@ -60,7 +60,7 @@
                             </label>
                             <div class="col-xs-9 custom-toggle">
                                 <label class="toggle">
-                                    <input id="new" type="checkbox" checked>
+                                    <input id="new" type="checkbox" >
                                     <span class="handle"></span>
                                 </label>
                             </div>
@@ -74,7 +74,7 @@
                             </label>
                             <div class="col-xs-9 custom-toggle">
                                 <label class="toggle">
-                                    <input id="important" type="checkbox" checked>
+                                    <input id="important" type="checkbox" >
                                     <span class="handle"></span>
                                 </label>
                             </div>
@@ -88,7 +88,7 @@
                             </label>
                             <div class="col-xs-9 custom-toggle">
                                 <label class="toggle">
-                                    <input id="lecture" type="checkbox" checked>
+                                    <input id="lecture" type="checkbox" >
                                     <span class="handle"></span>
                                 </label>
                             </div>
@@ -102,7 +102,7 @@
                             </label>
                             <div class="col-xs-9 custom-toggle">
                                 <label class="toggle">
-                                    <input id="event" type="checkbox" checked>
+                                    <input id="event" type="checkbox" >
                                     <span class="handle"></span>
                                 </label>
                             </div>
@@ -114,18 +114,39 @@
         <script src="js/site.min.js"></script>
         <script src="https://static.line-scdn.net/liff/edge/2/sdk.js" charset="utf-8"></script>
         <script>
-            liff.init({
-                liffId: '1655168464-glkMVdNy'
-            })
+            liff.init({liffId: '1655168464-glkMVdNy'})
                 .then(() => {
                     if (!liff.isLoggedIn() && !liff.isInClient()) {
-                        // alert('error: please login');
                         console.warn('please login');
                     } else {
-                        fetch(`/settings/${liff.getDecodedIDToken().sub}`)
+                        fetch(`/api/v1/settings/${liff.getDecodedIDToken().sub}`)
                             .then(response => response.json())
-                            .then(data => alert(typeof data + ', ' + data))
+                            .then(data => {
+                                document.querySelector('#id').value = data.number;
+                                document.querySelector('#new').checked = data.push_new;
+                                document.querySelector('#important').checked = data.push_important;
+                                document.querySelector('#lecture').checked = data.push_cancel;
+                                document.querySelector('#event').checked = data.push_event;
+
+                                document.querySelector('form')
+                                    .addEventListener('change', send);
+                            })
                             .catch(error => alert(error));
+                        function send() {
+                            fetch(
+                                `/api/v1/settings/${liff.getDecodedIDToken().sub}`,
+                                {
+                                    method: post,
+                                    body: JSON.stringify({
+                                        number: document.querySelector('#id').value,
+                                        push_new: document.querySelector('#new').checked,
+                                        push_important: document.querySelector('#important').checked,
+                                        push_cancel: document.querySelector('#lecture').checked,
+                                        push_event: document.querySelector('#event').checked,
+                                    }),
+                                }
+                            );
+                        }
                     }
                 });
         </script>

@@ -61,7 +61,8 @@ export default class Line implements IClient {
             // `https://tut-php-api.herokuapp.com/api/v1/settings/${liff.getDecodedIDToken().sub}?type=js`
         });
         this.app.post('/api/v1/settings/:id', (req, res) => {
-            res.send('');
+            res.status(200).end();
+            logger.debug(req.body, typeof req.body);
         });
 
         // ! DEBUG
