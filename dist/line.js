@@ -37,7 +37,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var _a;
 exports.__esModule = true;
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 var fs = require("fs");
 var axios_1 = require("axios");
 var express = require("express");
@@ -52,7 +51,7 @@ var Line = /** @class */ (function () {
         this.listeners = [];
         this.client = new line.Client(config);
         this.app = express();
-        var listener = this.app.listen(port, function () { return logger.info("listening on port " + listener.address().port); });
+        var listener = this.app.listen(port, function () { var _a; return logger.info("listening on port " + ((_a = listener === null || listener === void 0 ? void 0 : listener.address()) === null || _a === void 0 ? void 0 : _a.port)); });
         this.app.use(express.urlencoded({ extended: true }));
         this.app.use(express.text());
         this.app.use('/settings', express.static('settings'));
@@ -259,8 +258,8 @@ var Line = /** @class */ (function () {
         }
     };
     /**
-    * convert line message object into general message object
-    */
+     * convert line message object into general message object
+     */
     Line.prototype._convertToGeneral = function (message) {
         if (message.type === 'message') {
             if (message.message.type === 'text') {

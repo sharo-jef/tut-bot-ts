@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node -r dotenv/config .",
     "build": "tsc",
-    "fetch": "git fetch origin master; git reset --hard origin/master; npm i; npm run build; refresh;"
+    "fetch": "git fetch origin master; git reset --hard origin/master; npm i; refresh;",
+    "push": "pwsh -command \"npm run build; git add .; git commit -m updated; git push origin master;\""
   },
   "author": "sharo_jef",
   "license": "MIT",
