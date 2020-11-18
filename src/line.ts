@@ -25,7 +25,7 @@ export default class Line implements IClient {
         this.app = express();
         const listener = this.app.listen(
             port,
-            () => logger.info(`listening on port ${listener.address().port}`),
+            () => logger.info(`listening on port ${listener?.address()?.port}`),
         );
         this.app.use(express.urlencoded({extended: true}));
         this.app.use(express.text());
