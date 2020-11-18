@@ -122,10 +122,10 @@
                         // alert('error: please login');
                         console.warn('please login');
                     } else {
-                        document.querySelector('#id').value = liff.getDecodedIDToken().sub;
-                        const script = document.createElement('script');
-                        script.src = `https://tut-php-api.herokuapp.com/api/v1/settings/${liff.getDecodedIDToken().sub}?type=js`;
-                        document.body.appendChild(script);
+                        fetch(`/settings/${liff.getDecodedIDToken().sub}`)
+                            .then(response => response.json())
+                            .then(data => alert(typeof data + ', ' + data))
+                            .catch(error => alert(error));
                     }
                 });
         </script>
