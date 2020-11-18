@@ -7,8 +7,14 @@ jobs:
   deply:
     runs-on: ubuntu-latest
     steps:
-    - name: Deploy To Glitch
-      uses: kanadgupta/glitch-sync@master
-      with:
-        project-id: '${{ secrets.PROJECT_ID }}'
-        auth-token: '${{ secrets.AUTH_TOKEN }}'
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 15
+      - name: Build
+        run: npm i; npm run build
+      - name: Deploy To Glitch
+        uses: kanadgupta/glitch-sync@master
+        with:
+          project-id: ${{ secrets.PROJECT_ID }}
+          auth-token: ${{ secrets.AUTH_TOKEN }}
