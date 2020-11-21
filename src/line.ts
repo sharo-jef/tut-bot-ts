@@ -30,7 +30,7 @@ export default class Line implements IClient {
         this.app.use(express.urlencoded({extended: true}));
         this.app.use(express.text());
         this.app.use('/settings', express.static('settings'));
-        this.app.get('/', (_, res) => res.status(200).end());
+        this.app.get('/', (_req, res) => res.status(200).end());
         this.app.post('/hook', line.middleware(config), async (req, res) => {
             res.status(200).end();
             const messages: Message[] = req.body.events.map(this._convertToGeneral);

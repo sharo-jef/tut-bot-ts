@@ -55,7 +55,7 @@ var Line = /** @class */ (function () {
         this.app.use(express.urlencoded({ extended: true }));
         this.app.use(express.text());
         this.app.use('/settings', express.static('settings'));
-        this.app.get('/', function (_, res) { return res.status(200).end(); });
+        this.app.get('/', function (_req, res) { return res.status(200).end(); });
         this.app.post('/hook', line.middleware(config), function (req, res) { return __awaiter(_this, void 0, void 0, function () {
             var messages, _i, _a, listener_1, _b, messages_1, message, _c, _d, listener_2;
             return __generator(this, function (_e) {
