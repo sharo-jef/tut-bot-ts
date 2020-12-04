@@ -115,7 +115,7 @@
         <script src="js/site.min.js"></script>
         <script src="https://static.line-scdn.net/liff/edge/2/sdk.js" charset="utf-8"></script>
         <script>
-            liff.init({liffId: '1655168464-glkMVdNy'})
+            liff.init({ liffId: '1655168464-glkMVdNy' })
                 .then(() => {
                     if (!liff.isLoggedIn() && !liff.isInClient()) {
                         console.warn('please login');
@@ -145,6 +145,12 @@
                             .catch(error => alert(error));
 
                         function send() {
+                            if (
+                                document.querySelector('#new').checked
+                                && !document.querySelector('#important').checked
+                            ) {
+                                document.querySelector('#important').checked = true;
+                            }
                             fetch(
                                 `/api/v1/settings/${liff.getDecodedIDToken().sub}`,
                                 {
