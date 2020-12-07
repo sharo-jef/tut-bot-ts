@@ -5,8 +5,7 @@ import * as express from 'express';
 import * as line from '@line/bot-sdk';
 import * as log4js from 'log4js';
 
-import {FollowMessage, Message, MultipleMessage, TextMessage} from './@types/tutbot';
-import IClient from './iclient';
+import { FollowMessage, Message, MultipleMessage, TextMessage, IClient } from './@types/tutbot';
 import richmenu from './richmenu';
 
 const logger = log4js.getLogger('Line');
@@ -27,7 +26,7 @@ export default class Line implements IClient {
             port,
             () => logger.info(`listening on port ${listener?.address()?.port}`),
         );
-        this.app.use(express.urlencoded({extended: true}));
+        this.app.use(express.urlencoded({ extended: true }));
         this.app.use(express.text());
         this.app.use('/settings', express.static('settings'));
         this.app.get('/', (_req, res) => res.status(200).end());
@@ -83,7 +82,7 @@ export default class Line implements IClient {
     }
 
     async send(messages: Message[]): Promise<void> {
-        const lineMessages: {to: string[], message: import('@line/bot-sdk').Message}[] = [];
+        const lineMessages: {to: string[], message: line.Message, replyToken?: string}[] = [];
         messages.map(this._convertToLine).forEach(message => {
             if (!message) {
                 return;
@@ -103,8 +102,12 @@ export default class Line implements IClient {
         for (const message of lineMessages) {
             const MAX_RECIPIENTS = 500;
             for (let i = 0; i < message.to.length; i += MAX_RECIPIENTS) {
-                await this.client.multicast(message.to.slice(i, i + MAX_RECIPIENTS), message.message)
-                    .catch(error => logger.fatal(error));
+                if (message.replyToken) {
+                    await this.client.replyMessage(message.replyToken, message.message);
+                } else {
+                    await this.client.multicast(message.to.slice(i, i + MAX_RECIPIENTS), message.message)
+                        .catch(error => logger.fatal(error));
+                }
             }
         }
     }
@@ -117,31 +120,34 @@ export default class Line implements IClient {
             ((message: Message) => Promise<void>)
             | ((messages: Message[]) => Promise<void>),
     ): this {
-        this.listeners.push({type: event, listener});
+        this.listeners.push({ type: event, listener });
         return this;
     }
 
     /**
      * convert general message object into line message object
      */
-    _convertToLine(message: Message): {to: string[], message: line.Message} | void {
-        let tmp: {to: string[], message: line.Message};
+    _convertToLine(message: Message): {to: string[], message: line.Message, replyToken?: string} | void {
+        let tmp: {to: string[], message: line.Message, replyToken?: string};
+        let textMessage: TextMessage;
+        let multipleMessage: MultipleMessage;
         switch (message.type) {
         case 'text':
+            textMessage = message as TextMessage;
             tmp = {
                 to: message.to,
                 message: {
                     type: 'text',
-                    text: (message as TextMessage).text,
+                    text: textMessage.text,
                 },
             };
             if (
-                (message as TextMessage).quickReply
-                && (message as TextMessage).quickReply?.texts
-                && (message as TextMessage).quickReply?.texts?.length
+                textMessage.quickReply
+                && textMessage.quickReply.texts
+                && textMessage.quickReply.texts.length
             ) {
                 tmp.message.quickReply = {
-                    items: (message as TextMessage).quickReply!.texts.map(text => ({
+                    items: textMessage.quickReply.texts.map(text => ({
                         type: 'action',
                         action: {
                             type: 'message',
@@ -151,16 +157,20 @@ export default class Line implements IClient {
                     } as line.QuickReplyItem)),
                 };
             }
+            if (textMessage.replyToken) {
+                tmp.replyToken = textMessage.replyToken;
+            }
             return tmp;
         case 'multiple':
+            multipleMessage = message as MultipleMessage;
             return {
                 to: message.to,
                 message: {
                     type: 'template',
-                    altText: (message as MultipleMessage).altText,
+                    altText: multipleMessage.altText,
                     template: {
                         type: 'carousel',
-                        columns: (message as MultipleMessage).contents.map(content => ({
+                        columns: multipleMessage.contents.map(content => ({
                             title: content.title,
                             text: content.content,
                             defaultAction: {
@@ -196,6 +206,7 @@ export default class Line implements IClient {
                         to: [message.source.userId],
                         type: 'text',
                         text: message.message.text,
+                        replyToken: message.replyToken,
                     } as TextMessage;
                 }
             }

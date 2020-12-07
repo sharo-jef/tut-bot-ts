@@ -169,24 +169,29 @@ var Line = /** @class */ (function () {
                         _i = 0, lineMessages_1 = lineMessages;
                         _a.label = 1;
                     case 1:
-                        if (!(_i < lineMessages_1.length)) return [3 /*break*/, 6];
+                        if (!(_i < lineMessages_1.length)) return [3 /*break*/, 8];
                         message = lineMessages_1[_i];
                         MAX_RECIPIENTS = 500;
                         i = 0;
                         _a.label = 2;
                     case 2:
-                        if (!(i < message.to.length)) return [3 /*break*/, 5];
-                        return [4 /*yield*/, this.client.multicast(message.to.slice(i, i + MAX_RECIPIENTS), message.message)["catch"](function (error) { return logger.fatal(error); })];
+                        if (!(i < message.to.length)) return [3 /*break*/, 7];
+                        if (!message.replyToken) return [3 /*break*/, 4];
+                        return [4 /*yield*/, this.client.replyMessage(message.replyToken, message.message)];
                     case 3:
                         _a.sent();
-                        _a.label = 4;
-                    case 4:
+                        return [3 /*break*/, 6];
+                    case 4: return [4 /*yield*/, this.client.multicast(message.to.slice(i, i + MAX_RECIPIENTS), message.message)["catch"](function (error) { return logger.fatal(error); })];
+                    case 5:
+                        _a.sent();
+                        _a.label = 6;
+                    case 6:
                         i += MAX_RECIPIENTS;
                         return [3 /*break*/, 2];
-                    case 5:
+                    case 7:
                         _i++;
                         return [3 /*break*/, 1];
-                    case 6: return [2 /*return*/];
+                    case 8: return [2 /*return*/];
                 }
             });
         });
@@ -199,22 +204,24 @@ var Line = /** @class */ (function () {
      * convert general message object into line message object
      */
     Line.prototype._convertToLine = function (message) {
-        var _a, _b, _c;
         var tmp;
+        var textMessage;
+        var multipleMessage;
         switch (message.type) {
             case 'text':
+                textMessage = message;
                 tmp = {
                     to: message.to,
                     message: {
                         type: 'text',
-                        text: message.text
+                        text: textMessage.text
                     }
                 };
-                if (message.quickReply
-                    && ((_a = message.quickReply) === null || _a === void 0 ? void 0 : _a.texts)
-                    && ((_c = (_b = message.quickReply) === null || _b === void 0 ? void 0 : _b.texts) === null || _c === void 0 ? void 0 : _c.length)) {
+                if (textMessage.quickReply
+                    && textMessage.quickReply.texts
+                    && textMessage.quickReply.texts.length) {
                     tmp.message.quickReply = {
-                        items: message.quickReply.texts.map(function (text) { return ({
+                        items: textMessage.quickReply.texts.map(function (text) { return ({
                             type: 'action',
                             action: {
                                 type: 'message',
@@ -224,16 +231,20 @@ var Line = /** @class */ (function () {
                         }); })
                     };
                 }
+                if (textMessage.replyToken) {
+                    tmp.replyToken = textMessage.replyToken;
+                }
                 return tmp;
             case 'multiple':
+                multipleMessage = message;
                 return {
                     to: message.to,
                     message: {
                         type: 'template',
-                        altText: message.altText,
+                        altText: multipleMessage.altText,
                         template: {
                             type: 'carousel',
-                            columns: message.contents.map(function (content) { return ({
+                            columns: multipleMessage.contents.map(function (content) { return ({
                                 title: content.title,
                                 text: content.content,
                                 defaultAction: {
@@ -267,7 +278,8 @@ var Line = /** @class */ (function () {
                     return {
                         to: [message.source.userId],
                         type: 'text',
-                        text: message.message.text
+                        text: message.message.text,
+                        replyToken: message.replyToken
                     };
                 }
             }

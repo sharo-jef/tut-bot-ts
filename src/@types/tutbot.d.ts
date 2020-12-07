@@ -13,6 +13,7 @@ export interface TextMessage extends Message {
     type: 'text';
     text: string;
     quickReply?: QuickReply;
+    replyToken?: string;
 }
 
 /**
@@ -46,4 +47,12 @@ export interface Content {
     content: string;
     uri?: string;
     label?: string;
+}
+
+export interface IClient {
+    listeners: {type: string, listener: (...args: unknown[]) => Promise<void>}[];
+    send(messages: Message[]): Promise<void>;
+    on(event: 'message', listener: (message: Message) => Promise<void>): this;
+    on(event: 'messages', listener: (messages: Message[]) => Promise<void>): this;
+    on(event: string, listener: ((message: Message) => Promise<void>) | ((messages: Message[]) => Promise<void>)): this;
 }
