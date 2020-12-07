@@ -237,8 +237,8 @@ var Line = /** @class */ (function () {
                 return tmp;
             case 'multiple':
                 multipleMessage = message;
-                return {
-                    to: message.to,
+                tmp = {
+                    to: multipleMessage.to,
                     message: {
                         type: 'template',
                         altText: multipleMessage.altText,
@@ -264,7 +264,8 @@ var Line = /** @class */ (function () {
                                 ]
                             }); })
                         }
-                    }
+                    },
+                    replyToken: multipleMessage.replyToken
                 };
         }
     };

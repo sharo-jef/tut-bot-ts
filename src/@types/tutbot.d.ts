@@ -4,6 +4,7 @@
 export interface Message {
     to: string[];
     type: string;
+    replyToken?: string;
 }
 
 /**
@@ -13,7 +14,6 @@ export interface TextMessage extends Message {
     type: 'text';
     text: string;
     quickReply?: QuickReply;
-    replyToken?: string;
 }
 
 /**

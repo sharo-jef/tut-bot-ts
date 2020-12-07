@@ -163,8 +163,8 @@ export default class Line implements IClient {
             return tmp;
         case 'multiple':
             multipleMessage = message as MultipleMessage;
-            return {
-                to: message.to,
+            tmp = {
+                to: multipleMessage.to,
                 message: {
                     type: 'template',
                     altText: multipleMessage.altText,
@@ -191,6 +191,7 @@ export default class Line implements IClient {
                         } as line.TemplateColumn)),
                     },
                 },
+                replyToken: multipleMessage.replyToken,
             };
         }
     }
