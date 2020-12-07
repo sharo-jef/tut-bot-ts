@@ -267,6 +267,7 @@ var Line = /** @class */ (function () {
                     },
                     replyToken: multipleMessage.replyToken
                 };
+                return tmp;
         }
     };
     /**

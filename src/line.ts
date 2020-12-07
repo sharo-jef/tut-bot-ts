@@ -193,6 +193,7 @@ export default class Line implements IClient {
                 },
                 replyToken: multipleMessage.replyToken,
             };
+            return tmp;
         }
     }
 
