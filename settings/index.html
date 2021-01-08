@@ -117,7 +117,7 @@
         <script>
             liff.init({ liffId: '1655168464-glkMVdNy' })
                 .then(() => {
-                    if (!liff.isLoggedIn() && !liff.isInClient()) {
+                    if (!liff.isLoggedIn() || !liff.isInClient()) {
                         console.warn('please login');
                     } else {
                         fetch(`/api/v1/settings/${liff.getDecodedIDToken().sub}`)
